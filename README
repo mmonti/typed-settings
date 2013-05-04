@@ -1,1 +1,23 @@
-This file was created by IntelliJ IDEA 12.1.2 for binding GitHub repository
+typed-settings
+--------------
+Retrieve your application settings in a typed way, simply defining an interface.
+
+Example:
+
+// = Define the type of your settings.
+public interface AppSettings {
+    @javax.annotation.Named("config.settings.string")
+    String getString();
+}
+
+// = Define the source and converters.
+final SettingsBuilder builder = SettingsBuilder.create();
+builder.addConfiguration(new PropertiesConfiguration(...));
+builder.withConverter(Converters.dateConverter("dd.MM.yyyy"));
+
+// = Build it.
+final Settings settings = builder.build();
+final AppSettings applicationSettings = settings.getSettings(AppSettings.class);
+
+// = Use it.
+applicationSettings.getString()

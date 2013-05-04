@@ -1,5 +1,6 @@
 package org.mmonti.settings.converters.impl;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang.time.FastDateFormat;
 import org.mmonti.settings.converters.Converter;
 
@@ -14,7 +15,16 @@ import java.util.UnknownFormatConversionException;
  */
 public class DateConverterImpl implements Converter<Date> {
 
-    private final static FastDateFormat fastDateFormat= FastDateFormat.getInstance("MM/dd/yyyy");
+    private static FastDateFormat fastDateFormat = null;
+
+    public DateConverterImpl() {
+        this("MM/dd/yyyy");
+    }
+
+    public DateConverterImpl(String dateFormat) {
+        Preconditions.checkNotNull("dateFormat argument cannot be null.");
+        fastDateFormat = FastDateFormat.getInstance(dateFormat);
+    }
 
     @Override
     public Class<Date> getConversionType() {
