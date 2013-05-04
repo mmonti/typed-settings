@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * TODO: Describe your class here.
+ * Class in charge to register converters.
  *
  * @author: monti.mauro
  */
@@ -14,6 +14,9 @@ public class ConverterManager {
 
     private Map<Class<?>, Converter<?>> convertersMap = null;
 
+    /**
+     *
+     */
     public ConverterManager() {
         this.convertersMap = new HashMap<>();
     }

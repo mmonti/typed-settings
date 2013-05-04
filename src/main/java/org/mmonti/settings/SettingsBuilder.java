@@ -1,8 +1,11 @@
 package org.mmonti.settings;
 
+import com.google.common.base.Preconditions;
 import org.mmonti.settings.converters.Converter;
 import org.mmonti.settings.impl.MapConfigurationSource;
 import org.mmonti.settings.impl.PropertiesConfigurationSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -13,6 +16,8 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  * @author: monti.mauro
  */
 public class SettingsBuilder {
+
+    private static final Logger logger = LoggerFactory.getLogger(SettingsBuilder.class);
 
     private Deque<ConfigurationSource> configurationSources = null;
     private List<Converter<?>> converters = null;
@@ -32,6 +37,8 @@ public class SettingsBuilder {
      * @return
      */
     public SettingsBuilder add(final Map<String, Object> properties) {
+        Preconditions.checkNotNull(properties, "properties argument cannot be null.");
+
         this.configurationSources.push(new MapConfigurationSource(properties));
         return this;
     }
@@ -42,6 +49,8 @@ public class SettingsBuilder {
      * @return
      */
     public SettingsBuilder add(final Properties properties) {
+        Preconditions.checkNotNull(properties, "properties argument cannot be null.");
+
         this.configurationSources.push(new PropertiesConfigurationSource(properties));
         return this;
     }
@@ -52,6 +61,8 @@ public class SettingsBuilder {
      * @return
      */
     public SettingsBuilder withConverter(final Converter<?> converter) {
+        Preconditions.checkNotNull(converter, "converter argument cannot be null.");
+
         this.converters.add(converter);
         return this;
     }
@@ -62,14 +73,25 @@ public class SettingsBuilder {
      */
     public Settings build() {
         final Properties properties = new Properties();
-        while (!configurationSources.isEmpty()) {
-            final ConfigurationSource configurationSource = configurationSources.pop();
-            properties.putAll(configurationSource.getConfiguration());
+
+        if (configurationSources.isEmpty()) {
+            logger.warn("no configuration sources specified.");
+        } else {
+            while (!configurationSources.isEmpty()) {
+                final ConfigurationSource configurationSource = configurationSources.pop();
+                properties.putAll(configurationSource.getConfiguration());
+            }
         }
 
         if (converters.isEmpty()) {
-            return new Settings(properties);
+            logger.warn("no custom converters added. using defaults.");
+            return new SettingsImpl(properties);
         }
-        return new Settings(properties, converters);
+
+        return new SettingsImpl(properties, converters);
+    }
+
+    public Collection<ConfigurationSource> getConfigurationSources() {
+        return Collections.unmodifiableCollection(configurationSources);
     }
 }

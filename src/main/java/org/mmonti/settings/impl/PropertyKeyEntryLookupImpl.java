@@ -13,7 +13,6 @@ import java.util.Map;
 
 /**
  *
- *
  * @author: monti.mauro
  */
 public class PropertyKeyEntryLookupImpl implements PropertyKeyEntryLookup {
@@ -67,7 +66,7 @@ public class PropertyKeyEntryLookupImpl implements PropertyKeyEntryLookup {
      * @return
      */
     @Override
-    public <T> T lookup(Method method) {
+    public <T> T lookup(final Method method) {
         final PropertyKeyEntry propertyKeyEntry = propertyKeyEntryMap.get(method.getName());
         return (T) converterManager.getConverterForType(propertyKeyEntry.getReturnType()).apply(propertyKeyEntry.getValue());
     }

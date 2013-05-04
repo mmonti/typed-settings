@@ -15,4 +15,11 @@ public interface ConfigurationSource {
      */
     Map<String, Object> getConfiguration();
 
+    /**
+     *
+     * @param key
+     * @return
+     */
+    boolean contains(String key);
+
 }

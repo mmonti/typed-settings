@@ -13,18 +13,23 @@ import java.util.Properties;
  */
 public class PropertiesConfigurationSource implements ConfigurationSource {
 
-    private Properties properties;
+    private Properties properties = null;
 
-    public PropertiesConfigurationSource(Properties properties) {
+    public PropertiesConfigurationSource(final Properties properties) {
         this.properties = properties;
     }
 
     @Override
     public Map<String, Object> getConfiguration() {
         final Map<String, Object> configuration = new HashMap<>();
-        for (Object key : properties.keySet()) {
+        for (final Object key : properties.keySet()) {
             configuration.put(key.toString(), properties.get(key));
         }
         return configuration;
+    }
+
+    @Override
+    public boolean contains(String key) {
+        return properties.containsKey(key);
     }
 }

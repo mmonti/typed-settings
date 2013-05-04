@@ -11,18 +11,23 @@ import java.util.Map;
  */
 public class MapConfigurationSource implements ConfigurationSource {
 
-    private Map<String, Object> objectMap;
+    private Map<String, Object> mapConfiguration = null;
 
     /**
      *
-     * @param objectMap
+     * @param mapConfiguration
      */
-    public MapConfigurationSource(Map<String, Object> objectMap) {
-        this.objectMap = objectMap;
+    public MapConfigurationSource(final Map<String, Object> mapConfiguration) {
+        this.mapConfiguration = mapConfiguration;
     }
 
     @Override
     public Map<String, Object> getConfiguration() {
-        return objectMap;
+        return mapConfiguration;
+    }
+
+    @Override
+    public boolean contains(final String key) {
+        return this.mapConfiguration.containsKey(key);
     }
 }
