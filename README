@@ -1,23 +1,5 @@
 typed-settings
 --------------
-Retrieve your application settings in a typed way, simply defining an interface.
+Typed Settings for your application.
 
-Example:
-
-// = Define the type of your settings.
-public interface AppSettings {
-    @javax.annotation.Named("config.settings.string")
-    String getString();
-}
-
-// = Define the source and converters.
-final SettingsBuilder builder = SettingsBuilder.create();
-builder.addConfiguration(new PropertiesConfiguration(...));
-builder.withConverter(Converters.dateConverter("dd.MM.yyyy"));
-
-// = Build it.
-final Settings settings = builder.build();
-final AppSettings applicationSettings = settings.getSettings(AppSettings.class);
-
-// = Use it.
-applicationSettings.getString()
+For more information visit: http://mmonti.github.io/typed-settings/
