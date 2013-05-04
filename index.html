@@ -35,9 +35,9 @@
 
 <p>Typed Settings for your application</p>
 
-<p>Suppose that you have an <em>configuration.properties</em> in your application where you define your application settings.</p>
+<p>Suppose you have an <em>configuration.properties</em> in your application where you define your application settings.</p>
 
-<p>This <em>configuration.properties</em> can contains the following settings:</p>
+<p>This <em>configuration.properties</em> can contains the following entries:</p>
 
 <pre><code>config.settings.port=8081
 config.settings.host=localhost
@@ -45,26 +45,26 @@ config.settings.host=localhost
 
 <h4>standalone use</h4>
 
-<p>We start defining an interface with the methods to access the properties in the <code>configuration.properties</code> file. Each method has to be annotated with <code>@javax.annotation.Named</code>, and specify the property key to get access.</p>
+<p>We start defining an interface with the methods to access the properties in the <code>configuration.properties</code> file. Each method needs to be annotated with <code>@javax.annotation.Named</code> annotation, and specify a key of the properties file to access as value.</p>
 
 <div class="highlight"><pre><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">AppSettings</span> <span class="o">{</span>
     <span class="nd">@javax.annotation.Named</span><span class="o">(</span><span class="s">"config.settings.host"</span><span class="o">)</span>
     <span class="n">String</span> <span class="nf">getHost</span><span class="o">();</span>
     <span class="nd">@javax.annotation.Named</span><span class="o">(</span><span class="s">"config.settings.port"</span><span class="o">)</span>
-    <span class="n">String</span> <span class="nf">getPort</span><span class="o">();</span>
+    <span class="n">Integer</span> <span class="nf">getPort</span><span class="o">();</span>
 <span class="o">}</span>
 </pre></div>
 
-<p>Once we have defined our interface, we can create a <em>SettingsBuilder</em> object and specify the sources from where we will take the properties.</p>
+<p>Once we define our interface, we can create a <em>SettingsBuilder</em> object and specify the sources from where we will take the properties.</p>
 
-<p>Also we can register some "customs" converters. typed-settings define some basics converters but you can add your own, implementing the <code>Converter&lt;T&gt;</code> interface and calling <code>withConverter(...)</code> method.</p>
+<p>Optionally we can register some "customs" converters. typed-settings defines some basics converters but you can add your own, just implementing the interface <code>Converter&lt;T&gt;</code> and calling <code>withConverter(...)</code> method in the builder.</p>
 
 <div class="highlight"><pre><span class="kd">final</span> <span class="n">SettingsBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="n">SettingsBuilder</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
 <span class="n">builder</span><span class="o">.</span><span class="na">addConfiguration</span><span class="o">(</span><span class="k">new</span> <span class="n">PropertiesConfiguration</span><span class="o">(...));</span>
 <span class="n">builder</span><span class="o">.</span><span class="na">withConverter</span><span class="o">(</span><span class="n">Converters</span><span class="o">.</span><span class="na">dateConverter</span><span class="o">(</span><span class="s">"dd.MM.yyyy"</span><span class="o">));</span>
 </pre></div>
 
-<p>Finally we have to build the Settings object. This object, is basically a factory of Proxies. On each call to <code>getSettings(...)</code> it will create a proxy object that implements the interface that we provide as parameter.</p>
+<p>Finally we have to build the Settings object. This object, is basically a factory of proxies. Each call to <code>getSettings(...)</code> method, will create a proxy object that implements the interface that we provide as method argument.</p>
 
 <div class="highlight"><pre><span class="kd">final</span> <span class="n">Settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">build</span><span class="o">();</span>
 <span class="kd">final</span> <span class="n">AppSettings</span> <span class="n">applicationSettings</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="na">getSettings</span><span class="o">(</span><span class="n">AppSettings</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
