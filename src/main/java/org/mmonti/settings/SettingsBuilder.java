@@ -33,6 +33,17 @@ public class SettingsBuilder {
 
     /**
      *
+     * @param configurationSource
+     * @return
+     */
+    public SettingsBuilder add(final ConfigurationSource configurationSource) {
+        Preconditions.checkNotNull(configurationSource, "configurationSource argument cannot be null.");
+
+        this.configurationSources.push(configurationSource);
+        return this;
+    }
+    /**
+     *
      * @param properties
      * @return
      */
